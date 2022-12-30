@@ -1,0 +1,27 @@
+{
+  "name": "vector-tiles-interface",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Node.js application and API to serve vector tiles",
+  "scripts": {
+    "test": "tap -t 0"
+  },
+  "keywords": [
+    "vector tiles",
+    "tiles",
+    "linked data"
+  ],
+  "author": "Julian Rojas",
+  "license": "MIT",
+  "dependencies": {
+    "accepts": "^1.3.8",
+    "del": "^7.0.0",
+    "fastify": "^4.10.2",
+    "form-urlencoded": "^6.1.0",
+    "undici": "^5.14.0",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "tap": "^16.3.2"
+  }
+}

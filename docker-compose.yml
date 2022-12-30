@@ -1,0 +1,13 @@
+version: "3"
+services:
+  nginx:
+    build: ./nginx
+    links: 
+      - vector-tiles:vector-tiles
+    ports: 
+      - "8080:80"
+  vector-tiles:
+    build: ./
+    ports:
+      - "3000:3000"
+    restart: on-failure
