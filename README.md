@@ -1,4 +1,4 @@
-# vector-tiles-interface
+# tiles-interface
 
 Web API for serving (dynamic) vector tiles.
 
