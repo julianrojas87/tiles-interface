@@ -5,6 +5,26 @@
 
 export default {
     virtuoso: {
+        location: (id) => {
+            return `
+            PREFIX era: <http://data.europa.eu/949/>
+            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+            SELECT ?id ?label ?wkt
+            FROM <http://data.europa.eu/949/graph/rinf>
+            WHERE {
+                BIND(<${id}> AS ?id)
+                ?id a era:NetElement;
+                    ^era:elementPart [
+                        era:hasImplementation [
+                            a era:OperationalPoint;
+                            rdfs:label ?label;
+                            gsp:hasGeometry [ gsp:asWKT ?wkt ]
+                        ]
+                    ].
+            }
+            `
+        },
         queries: [
             (lat1, long1, lat2, long2) => {
                 // Query for all OP related topology nodes and their connections within given bbox
@@ -197,6 +217,25 @@ export default {
         ]
     },
     graphdb: {
+        location: (id) => {
+            return `
+            PREFIX era: <http://data.europa.eu/949/>
+            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+            SELECT ?id ?label ?wkt
+            WHERE {
+                BIND(<${id}> AS ?id)
+                ?id a era:NetElement;
+                    ^era:elementPart [
+                        era:hasImplementation [
+                            a era:OperationalPoint;
+                            rdfs:label ?label;
+                            gsp:hasGeometry [ gsp:asWKT ?wkt ]
+                        ]
+                    ].
+            }
+            `
+        },
         queries: [
             (lat1, long1, lat2, long2) => {
                 // Query for all OP related topology nodes and their connections within given bbox
