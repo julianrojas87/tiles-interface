@@ -3,10 +3,10 @@ services:
   nginx:
     build: ./nginx
     links: 
-      - vector-tiles:vector-tiles
+      - tile-interface:tile-interface
     ports: 
       - "8080:80"
-  vector-tiles:
+  tile-interface:
     build: ./
     ports:
       - "3000:3000"
