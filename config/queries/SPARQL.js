@@ -135,8 +135,8 @@ export default {
                             era:navigability ?navBA.
                     }
 
-                    FILTER(?long >= ${long1} && ?long <= ${long2})
-                    FILTER(?lat <= ${lat1} && ?lat >= ${lat2})
+                    FILTER(?long1 >= ${long1} && ?long1 <= ${long2})
+                    FILTER(?lat1 <= ${lat1} && ?lat1 >= ${lat2})
                 }
                 `;
             },
@@ -346,8 +346,8 @@ export default {
                             era:navigability ?navBA.
                     }
 
-                    FILTER(?long >= ${long1} && ?long <= ${long2})
-                    FILTER(?lat <= ${lat1} && ?lat >= ${lat2})
+                    FILTER(?long1 >= ${long1} && ?long1 <= ${long2})
+                    FILTER(?lat1 <= ${lat1} && ?lat1 >= ${lat2})
                 }
                 `;
             },
