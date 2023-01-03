@@ -3,11 +3,11 @@ FROM node:18
 # Network port number
 EXPOSE 3000
 # Create a new directory for app files
-RUN mkdir -p /opt/vector-tiles
+RUN mkdir -p /opt/tile-interface
 # Set working directory in the container
-WORKDIR /opt/vector-tiles
+WORKDIR /opt/tile-interface
 # Copy source files
-COPY . /opt/vector-tiles/
+COPY . /opt/tile-interface/
 # Install dependencies
 RUN npm install
 # Setup container's entrypoint script
