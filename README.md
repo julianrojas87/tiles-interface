@@ -10,7 +10,7 @@ To deploy follow these steps:
 
 1. Make sure to have a recent version of [Docker](https://docs.docker.com/engine/install/) installed.
 
-2. Define the required query(ies) depending on the storage type. For example for SPARQL-based storages, use the [sparql.js](https://github.com/julianrojas87/vector-tiles-interface/blob/main/config/queries/sparql.js) script.
+2. Define the required query(ies) depending on the storage type. For example for SPARQL-based storages, use the [SPARQL.js](https://github.com/julianrojas87/tile-interface/blob/master/config/queries/SPARQL.js) script.
 
 3. Build and run the docker containers:
 
@@ -38,7 +38,7 @@ Then follow these steps:
    npm install
    ```
 
-3. Fill in the configuration parameters in the [`config.js`](https://github.com/julianrojas87/vector-tiles-interface/blob/main/config/config.js) file. The configuration script already contains some examples to deal with SPARQL storages.
+3. Fill in the configuration parameters in the [`config.js`](https://github.com/julianrojas87/tile-interface/blob/master/config/config.js) file. The configuration script already contains some examples to deal with SPARQL storages.
 
 4. Once all the configuration parameters have been filled, run the application:
 
@@ -46,4 +46,4 @@ Then follow these steps:
    node bin/serve.js
    ```
 
-Unlike the dockerized deploy, in this way a NGINX instance is not set up automatically. Check the [`nginx.conf`](https://github.com/julianrojas87/vector-tiles-interface/blob/main/nginx/nginx.conf) file in this repository to see how it can be configured.
+Unlike the dockerized deploy, in this way a NGINX instance is not set up automatically. Check the [`nginx.conf`](https://github.com/julianrojas87/tile-interface/blob/master/nginx/nginx.conf) file in this repository to see how it can be configured.
