@@ -14,7 +14,7 @@ export const config = {
         {
             type: 'SPARQL',
             name: 'virtuoso',
-            endpoint: 'https://linked.ec-dataplatform.eu/sparql',
+            endpoint: 'http://10.2.32.149:8890/sparql',
             concurrentQueries: true,
             options: {
                 infer: false,
