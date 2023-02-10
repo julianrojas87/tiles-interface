@@ -48,6 +48,26 @@ export const config = {
                 'Vary': 'Accept',
                 'Cache-Control': 'public, max-age=86400'
             }
+        },
+        {
+            type: 'SPARQL',
+            name: 'stardog',
+            endpoint: 'http://10.2.32.149:5820/ERA-KG/query',
+            concurrentQueries: true,
+            options: {
+                infer: false,
+                timeout: 0
+            },
+            requestHeaders: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'User-Agent': 'curl/7.68.0',
+                'Authorization': 'Basic YWRtaW46YWRtaW4='
+            },
+            responseHeaders: {
+                'Access-Control-Allow-Origin': '*',
+                'Vary': 'Accept',
+                'Cache-Control': 'public, max-age=86400'
+            }
         }
     ]
 };
