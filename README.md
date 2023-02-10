@@ -1,6 +1,6 @@
 # tile-interface
 
-Web API for serving (dynamic) vector tiles.
+Web API for serving (dynamic) network graph tiles.
 
 ## Run WITH Docker
 
