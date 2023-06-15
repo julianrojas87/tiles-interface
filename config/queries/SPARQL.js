@@ -11,7 +11,7 @@ export default {
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
             PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
             SELECT ?id ?label ?wkt
-            FROM <http://data.europa.eu/949/graph/rinf>
+            FROM <http://era.europa.eu/knowledge-graph/rinf>
             WHERE {
                 BIND(<${id}> AS ?id)
                 ?id a era:NetElement;
@@ -38,7 +38,7 @@ export default {
                         era:length ?length;
                         era:linkedTo ?nextNe.
                 }
-                FROM <http://data.europa.eu/949/graph/rinf>
+                FROM <http://era.europa.eu/knowledge-graph/rinf>
                 WHERE {
                     ?OP a era:OperationalPoint;
                         era:hasAbstraction ?mesoOPNe;
@@ -88,7 +88,7 @@ export default {
                         geosparql:asWKT ?wkt;
                         era:linkedTo ?nextNe.
                 }
-                FROM <http://data.europa.eu/949/graph/rinf>
+                FROM <http://era.europa.eu/knowledge-graph/rinf>
                 WHERE {
                     ?OP1 a era:OperationalPoint;
                         wgs:location [ 
@@ -154,7 +154,7 @@ export default {
                     ?opne gsp:asWKT ?opWkt;
                         era:length ?opLength.
                 } 
-                FROM <http://data.europa.eu/949/graph/rinf>
+                FROM <http://era.europa.eu/knowledge-graph/rinf>
                 WHERE {        
                     ?inOP a era:OperationalPoint;
                         wgs:location [ 
@@ -228,7 +228,7 @@ export default {
                     ?solne era:length ?solLength;
                         gsp:asWKT ?solWkt.
                 } 
-                FROM <http://data.europa.eu/949/graph/rinf>
+                FROM <http://era.europa.eu/knowledge-graph/rinf>
                 WHERE {        
                     ?inOP a era:OperationalPoint;
                         wgs:location [ 
@@ -584,7 +584,7 @@ export default {
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
             PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
             SELECT ?id ?label ?wkt
-            FROM <http://data.europa.eu/949/graph/rinf>
+            FROM <http://era.europa.eu/knowledge-graph/rinf>
             WHERE {
                 BIND(<${id}> AS ?id)
                 ?id a era:NetElement;
@@ -611,7 +611,7 @@ export default {
                         era:length ?length;
                         era:linkedTo ?nextNe.
                 }
-                FROM <http://data.europa.eu/949/graph/rinf>
+                FROM <http://era.europa.eu/knowledge-graph/rinf>
                 WHERE {
                     ?OP a era:OperationalPoint;
                         era:hasAbstraction ?mesoOPNe;
@@ -661,7 +661,7 @@ export default {
                         geosparql:asWKT ?wkt;
                         era:linkedTo ?nextNe.
                 }
-                FROM <http://data.europa.eu/949/graph/rinf>
+                FROM <http://era.europa.eu/knowledge-graph/rinf>
                 WHERE {
                     ?OP1 a era:OperationalPoint;
                         wgs:location [ 
@@ -727,7 +727,7 @@ export default {
                     ?opne gsp:asWKT ?opWkt;
                         era:length ?opLength.
                 } 
-                FROM <http://data.europa.eu/949/graph/rinf>
+                FROM <http://era.europa.eu/knowledge-graph/rinf>
                 WHERE {        
                     ?inOP a era:OperationalPoint;
                         wgs:location [ 
@@ -801,7 +801,7 @@ export default {
                     ?solne era:length ?solLength;
                         gsp:asWKT ?solWkt.
                 } 
-                FROM <http://data.europa.eu/949/graph/rinf>
+                FROM <http://era.europa.eu/knowledge-graph/rinf>
                 WHERE {        
                     ?inOP a era:OperationalPoint;
                         wgs:location [ 
