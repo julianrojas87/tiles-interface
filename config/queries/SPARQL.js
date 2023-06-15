@@ -30,7 +30,7 @@ export default {
                 // Query for all OP related topology nodes and their connections within given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -80,7 +80,7 @@ export default {
                 // Query for all SoL related topology nodes and their connections within given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 PREFIX geosparql: <http://www.opengis.net/ont/geosparql#>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 CONSTRUCT {
@@ -144,7 +144,7 @@ export default {
                 // Query for outgoing SoL related topology nodes at the borders of the bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -218,7 +218,7 @@ export default {
                 // Query for incoming SoL related topology nodes at the borders of the bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -319,7 +319,7 @@ export default {
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 CONSTRUCT {
                     ?opne gsp:asWKT ?wkt;
                         era:length 1.0;
@@ -367,7 +367,7 @@ export default {
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 CONSTRUCT {
                     ?solne era:length ?length;
                         wgs:lat ?solLat;
@@ -430,7 +430,7 @@ export default {
                 // Here we apply both workarounds of the previous queries. 
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -505,7 +505,7 @@ export default {
                 // Here we apply both workarounds of the previous queries. 
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -603,7 +603,7 @@ export default {
                 // Query for all OP related topology nodes and their connections within given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -653,7 +653,7 @@ export default {
                 // Query for all SoL related topology nodes and their connections within given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 PREFIX geosparql: <http://www.opengis.net/ont/geosparql#>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 CONSTRUCT {
@@ -717,7 +717,7 @@ export default {
                 // Query for outgoing SoL related topology nodes at the borders of the bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -791,7 +791,7 @@ export default {
                 // Query for incoming SoL related topology nodes at the borders of the bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
