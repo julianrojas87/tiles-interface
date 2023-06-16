@@ -15,7 +15,7 @@ To deploy follow these steps:
 3. Build and run the docker containers:
 
    ```bash
-   docker-compose up -d
+   docker-compose --compatibility up -d --build
    ```
 
 ## Run WITHOUT Docker
