@@ -11,7 +11,7 @@ export default {
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
             PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
             SELECT ?id ?label ?wkt
-            FROM <http://era.europa.eu/knowledge-graph/rinf>
+            FROM <http://data.europa.eu/949/graph/rinf>
             WHERE {
                 BIND(<${id}> AS ?id)
                 ?id a era:NetElement;
@@ -30,7 +30,7 @@ export default {
                 // Query for all OP related topology nodes and their connections within given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -38,7 +38,7 @@ export default {
                         era:length ?length;
                         era:linkedTo ?nextNe.
                 }
-                FROM <http://era.europa.eu/knowledge-graph/rinf>
+                FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {
                     ?OP a era:OperationalPoint;
                         era:hasAbstraction ?mesoOPNe;
@@ -80,7 +80,7 @@ export default {
                 // Query for all SoL related topology nodes and their connections within given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX geosparql: <http://www.opengis.net/ont/geosparql#>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 CONSTRUCT {
@@ -88,7 +88,7 @@ export default {
                         geosparql:asWKT ?wkt;
                         era:linkedTo ?nextNe.
                 }
-                FROM <http://era.europa.eu/knowledge-graph/rinf>
+                FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {
                     ?OP1 a era:OperationalPoint;
                         wgs:location [ 
@@ -144,7 +144,7 @@ export default {
                 // Query for outgoing SoL related topology nodes at the borders of the bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -154,7 +154,7 @@ export default {
                     ?opne gsp:asWKT ?opWkt;
                         era:length ?opLength.
                 } 
-                FROM <http://era.europa.eu/knowledge-graph/rinf>
+                FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {        
                     ?inOP a era:OperationalPoint;
                         wgs:location [ 
@@ -218,7 +218,7 @@ export default {
                 // Query for incoming SoL related topology nodes at the borders of the bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -228,7 +228,7 @@ export default {
                     ?solne era:length ?solLength;
                         gsp:asWKT ?solWkt.
                 } 
-                FROM <http://era.europa.eu/knowledge-graph/rinf>
+                FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {        
                     ?inOP a era:OperationalPoint;
                         wgs:location [ 
@@ -319,7 +319,7 @@ export default {
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 CONSTRUCT {
                     ?opne gsp:asWKT ?wkt;
                         era:length 1.0;
@@ -367,7 +367,7 @@ export default {
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 CONSTRUCT {
                     ?solne era:length ?length;
                         wgs:lat ?solLat;
@@ -430,7 +430,7 @@ export default {
                 // Here we apply both workarounds of the previous queries. 
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -505,7 +505,7 @@ export default {
                 // Here we apply both workarounds of the previous queries. 
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -584,7 +584,7 @@ export default {
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
             PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
             SELECT ?id ?label ?wkt
-            FROM <http://era.europa.eu/knowledge-graph/rinf>
+            FROM <http://data.europa.eu/949/graph/rinf>
             WHERE {
                 BIND(<${id}> AS ?id)
                 ?id a era:NetElement;
@@ -603,7 +603,7 @@ export default {
                 // Query for all OP related topology nodes and their connections within given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -611,7 +611,7 @@ export default {
                         era:length ?length;
                         era:linkedTo ?nextNe.
                 }
-                FROM <http://era.europa.eu/knowledge-graph/rinf>
+                FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {
                     ?OP a era:OperationalPoint;
                         era:hasAbstraction ?mesoOPNe;
@@ -653,7 +653,7 @@ export default {
                 // Query for all SoL related topology nodes and their connections within given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX geosparql: <http://www.opengis.net/ont/geosparql#>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 CONSTRUCT {
@@ -661,7 +661,7 @@ export default {
                         geosparql:asWKT ?wkt;
                         era:linkedTo ?nextNe.
                 }
-                FROM <http://era.europa.eu/knowledge-graph/rinf>
+                FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {
                     ?OP1 a era:OperationalPoint;
                         wgs:location [ 
@@ -717,7 +717,7 @@ export default {
                 // Query for outgoing SoL related topology nodes at the borders of the bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -727,7 +727,7 @@ export default {
                     ?opne gsp:asWKT ?opWkt;
                         era:length ?opLength.
                 } 
-                FROM <http://era.europa.eu/knowledge-graph/rinf>
+                FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {        
                     ?inOP a era:OperationalPoint;
                         wgs:location [ 
@@ -791,7 +791,7 @@ export default {
                 // Query for incoming SoL related topology nodes at the borders of the bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
-                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/>
+                PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 CONSTRUCT {
@@ -801,7 +801,7 @@ export default {
                     ?solne era:length ?solLength;
                         gsp:asWKT ?solWkt.
                 } 
-                FROM <http://era.europa.eu/knowledge-graph/rinf>
+                FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {        
                     ?inOP a era:OperationalPoint;
                         wgs:location [ 
