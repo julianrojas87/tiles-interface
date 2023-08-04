@@ -27,7 +27,7 @@ export default {
         },
         queries: [
             (lat1, long1, lat2, long2) => {
-                // Query for all OP related topology nodes and their connections within given bbox
+                // Query for all OP related topology nodes and their connections within the given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
@@ -37,6 +37,7 @@ export default {
                     ?opne gsp:asWKT ?wkt;
                         era:length ?length;
                         era:linkedTo ?nextNe.
+                    ?prevNe era:linkedTo ?opne.
                 }
                 FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {
@@ -70,6 +71,20 @@ export default {
                             era:elementB ?opne;
                             era:navigability ?navBA.
                     }
+                    UNION
+                    {
+                        ?nr3 a era:NetRelation;
+                            era:elementA ?prevNe;
+                            era:elementB ?opne;
+                            era:navigability ?navAB.
+                    }
+                    UNION
+                    {
+                        ?nr4 a era:NetRelation;
+                            era:elementA ?opne;
+                            era:elementB ?prevNe;
+                            era:navigability ?navBA.
+                    }
 
                     FILTER(?long >= ${long1} && ?long <= ${long2})
                     FILTER(?lat <= ${lat1} && ?lat >= ${lat2})
@@ -77,7 +92,7 @@ export default {
                 `;
             },
             (lat1, long1, lat2, long2) => {
-                // Query for all SoL related topology nodes and their connections within given bbox
+                // Query for all SoL related topology nodes within the given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
@@ -85,8 +100,7 @@ export default {
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 CONSTRUCT {
                     ?solne era:length ?length;
-                        geosparql:asWKT ?wkt;
-                        era:linkedTo ?nextNe.
+                        geosparql:asWKT ?wkt.
                 }
                 FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {
@@ -118,23 +132,6 @@ export default {
 
                     BIND(CONCAT("POINT(", STR((?long1 + ?long2) / 2), " ", STR((?lat1 + ?lat2) / 2), ")") AS ?wkt)
                     
-                    VALUES ?navAB { era-nv:AB era-nv:Both }
-                    VALUES ?navBA { era-nv:BA era-nv:Both }
-
-                    {
-                        ?nr1 a era:NetRelation;
-                            era:elementA ?solne;
-                            era:elementB ?nextNe;
-                            era:navigability ?navAB.
-                    }
-                    UNION
-                    {
-                        ?nr2 a era:NetRelation;
-                            era:elementA ?nextNe;
-                            era:elementB ?solne;
-                            era:navigability ?navBA.
-                    }
-
                     FILTER(?long1 >= ${long1} && ?long1 <= ${long2})
                     FILTER(?lat1 <= ${lat1} && ?lat1 >= ${lat2})
                 }
@@ -312,7 +309,7 @@ export default {
         },
         queries: [
             (lat1, long1, lat2, long2) => {
-                // Query for all OP related topology nodes and their connections within given bbox
+                // Query for all OP related topology nodes and their connections within the given bbox
                 // Here we directly bind the default length because GraphDB does not deal well
                 // with conditional functions like COALESCE() of IF().
                 return `
@@ -324,6 +321,7 @@ export default {
                     ?opne gsp:asWKT ?wkt;
                         era:length 1.0;
                         era:linkedTo ?nextNe.
+                    ?prevNe era:linkedTo ?opne.
                 } 
                 WHERE {
                     ?OP a era:OperationalPoint;
@@ -353,6 +351,20 @@ export default {
                             era:elementB ?opne;
                             era:navigability ?navBA.
                     }
+                    UNION
+                    {
+                        ?nr3 a era:NetRelation;
+                            era:elementA ?prevNe;
+                            era:elementB ?opne;
+                            era:navigability ?navAB.
+                    }
+                    UNION
+                    {
+                        ?nr4 a era:NetRelation;
+                            era:elementA ?opne;
+                            era:elementB ?prevNe;
+                            era:navigability ?navBA.
+                    }
 
                     FILTER(?long >= ${long1} && ?long <= ${long2})
                     FILTER(?lat <= ${lat1} && ?lat >= ${lat2})
@@ -360,7 +372,7 @@ export default {
                 `;
             },
             (lat1, long1, lat2, long2) => {
-                // Query for all SoL related topology nodes and their connections within given bbox
+                // Query for all SoL related topology nodes within the given bbox
                 // In this case we query for the lat and long as separated properties
                 // since using the CONCAT function to merge them results in very poor performance.
                 return `
@@ -371,8 +383,7 @@ export default {
                 CONSTRUCT {
                     ?solne era:length ?length;
                         wgs:lat ?solLat;
-                        wgs:long ?solLong;
-                        era:linkedTo ?nextNe.
+                        wgs:long ?solLong.
                 } 
                 WHERE {
                     ?OP1 a era:OperationalPoint;
@@ -402,23 +413,6 @@ export default {
                         ^era:elementPart ?solMesoNe.
 
                     { BIND((?long1 + ?long2)/2 AS ?solLong) } UNION { BIND((?lat1 + ?lat2)/2 AS ?solLat) }
-
-                    VALUES ?navAB { era-nv:AB era-nv:Both }
-                    VALUES ?navBA { era-nv:BA era-nv:Both }
-
-                    {
-                        ?nr1 a era:NetRelation;
-                            era:elementA ?solne;
-                            era:elementB ?nextNe;
-                            era:navigability ?navAB.
-                    }
-                    UNION
-                    {
-                        ?nr2 a era:NetRelation;
-                            era:elementA ?nextNe;
-                            era:elementB ?solne;
-                            era:navigability ?navBA.
-                    }
 
                     FILTER(?long1 >= ${long1} && ?long1 <= ${long2})
                     FILTER(?lat1 <= ${lat1} && ?lat1 >= ${lat2})
@@ -600,7 +594,7 @@ export default {
         },
         queries: [
             (lat1, long1, lat2, long2) => {
-                // Query for all OP related topology nodes and their connections within given bbox
+                // Query for all OP related topology nodes and their connections within the given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
@@ -610,6 +604,7 @@ export default {
                     ?opne gsp:asWKT ?wkt;
                         era:length ?length;
                         era:linkedTo ?nextNe.
+                    ?prevNe era:linkedTo ?opne.
                 }
                 FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {
@@ -643,6 +638,20 @@ export default {
                             era:elementB ?opne;
                             era:navigability ?navBA.
                     }
+                    UNION
+                    {
+                        ?nr3 a era:NetRelation;
+                            era:elementA ?prevNe;
+                            era:elementB ?opne;
+                            era:navigability ?navAB.
+                    }
+                    UNION
+                    {
+                        ?nr4 a era:NetRelation;
+                            era:elementA ?opne;
+                            era:elementB ?prevNe;
+                            era:navigability ?navBA.
+                    }
 
                     FILTER(?long >= ${long1} && ?long <= ${long2})
                     FILTER(?lat <= ${lat1} && ?lat >= ${lat2})
@@ -650,7 +659,7 @@ export default {
                 `;
             },
             (lat1, long1, lat2, long2) => {
-                // Query for all SoL related topology nodes and their connections within given bbox
+                // Query for all SoL related topology nodes within the given bbox
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
@@ -690,23 +699,6 @@ export default {
                         ^era:elementPart ?solMesoNe.
 
                     BIND(CONCAT("POINT(", STR((?long1 + ?long2) / 2), " ", STR((?lat1 + ?lat2) / 2), ")") AS ?wkt)
-                    
-                    VALUES ?navAB { era-nv:AB era-nv:Both }
-                    VALUES ?navBA { era-nv:BA era-nv:Both }
-
-                    {
-                        ?nr1 a era:NetRelation;
-                            era:elementA ?solne;
-                            era:elementB ?nextNe;
-                            era:navigability ?navAB.
-                    }
-                    UNION
-                    {
-                        ?nr2 a era:NetRelation;
-                            era:elementA ?nextNe;
-                            era:elementB ?solne;
-                            era:navigability ?navBA.
-                    }
 
                     FILTER(?long1 >= ${long1} && ?long1 <= ${long2})
                     FILTER(?lat1 <= ${lat1} && ?lat1 >= ${lat2})
