@@ -33,11 +33,13 @@ export default {
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
                     ?opne gsp:asWKT ?wkt;
-                        era:length ?length;
-                        era:linkedTo ?nextNe.
-                    ?prevNe era:linkedTo ?opne.
+                        rt:cost ?length;
+                        rt:linkedTo ?nextNe.
+                    
+                    ?prevNe rt:linkedTo ?opne.
                 }
                 FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {
@@ -96,11 +98,12 @@ export default {
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
-                PREFIX geosparql: <http://www.opengis.net/ont/geosparql#>
+                PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
-                    ?solne era:length ?length;
-                        geosparql:asWKT ?wkt.
+                    ?solne rt:cost ?length;
+                        gsp:asWKT ?wkt.
                 }
                 FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {
@@ -144,12 +147,14 @@ export default {
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
-                    ?solne era:length ?solLength;
+                    ?solne rt:cost ?solLength;
                         gsp:asWKT ?solWkt;
-                        era:linkedTo ?opne.
+                        rt:linkedTo ?opne.
+                    
                     ?opne gsp:asWKT ?opWkt;
-                        era:length ?opLength.
+                        rt:cost ?opLength.
                 } 
                 FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {        
@@ -218,11 +223,13 @@ export default {
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
                     ?opne gsp:asWKT ?opWkt;
-                        era:length ?opLength;
-                        era:linkedTo ?solne.
-                    ?solne era:length ?solLength;
+                        rt:cost ?opLength;
+                        rt:linkedTo ?solne.
+                    
+                    ?solne rt:cost ?solLength;
                         gsp:asWKT ?solWkt.
                 } 
                 FROM <http://data.europa.eu/949/graph/rinf>
@@ -311,17 +318,19 @@ export default {
             (lat1, long1, lat2, long2) => {
                 // Query for all OP related topology nodes and their connections within the given bbox
                 // Here we directly bind the default length because GraphDB does not deal well
-                // with conditional functions like COALESCE() of IF().
+                // with conditional functions like COALESCE() or IF().
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
                     ?opne gsp:asWKT ?wkt;
-                        era:length 1.0;
-                        era:linkedTo ?nextNe.
-                    ?prevNe era:linkedTo ?opne.
+                        rt:cost 1.0;
+                        rt:linkedTo ?nextNe.
+                    
+                    ?prevNe rt:linkedTo ?opne.
                 } 
                 WHERE {
                     ?OP a era:OperationalPoint;
@@ -374,14 +383,15 @@ export default {
             (lat1, long1, lat2, long2) => {
                 // Query for all SoL related topology nodes within the given bbox
                 // In this case we query for the lat and long as separated properties
-                // since using the CONCAT function to merge them results in very poor performance.
+                // since using the CONCAT function to merge them, results in very poor performance.
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
-                    ?solne era:length ?length;
+                    ?solne rt:cost ?length;
                         wgs:lat ?solLat;
                         wgs:long ?solLong.
                 } 
@@ -427,13 +437,15 @@ export default {
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
-                    ?solne era:length ?solLength;
+                    ?solne rt:cost ?solLength;
                         wgs:lat ?solLat;
                         wgs:long ?solLong;
-                        era:linkedTo ?opne.
+                        rt:linkedTo ?opne.
+                    
                     ?opne gsp:asWKT ?opWkt;
-                        era:length 1.0.
+                        rt:cost 1.0.
                 } 
                 WHERE {        
                     ?inOP a era:OperationalPoint;
@@ -502,11 +514,13 @@ export default {
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
                     ?opne gsp:asWKT ?opWkt;
-                        era:length 1.0;
-                        era:linkedTo ?solne.
-                    ?solne era:length ?solLength;
+                        rt:cost 1.0;
+                        rt:linkedTo ?solne.
+                    
+                    ?solne rt:cost ?solLength;
                         wgs:lat ?solLat;
                         wgs:long ?solLong.
                 } 
@@ -600,11 +614,13 @@ export default {
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
                     ?opne gsp:asWKT ?wkt;
-                        era:length ?length;
-                        era:linkedTo ?nextNe.
-                    ?prevNe era:linkedTo ?opne.
+                        rt:cost ?length;
+                        rt:linkedTo ?nextNe.
+                    
+                    ?prevNe rt:linkedTo ?opne.
                 }
                 FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {
@@ -663,12 +679,12 @@ export default {
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
-                PREFIX geosparql: <http://www.opengis.net/ont/geosparql#>
+                PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
-                    ?solne era:length ?length;
-                        geosparql:asWKT ?wkt;
-                        era:linkedTo ?nextNe.
+                    ?solne rt:cost ?length;
+                        gsp:asWKT ?wkt.
                 }
                 FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {
@@ -699,7 +715,7 @@ export default {
                         ^era:elementPart ?solMesoNe.
 
                     BIND(CONCAT("POINT(", STR((?long1 + ?long2) / 2), " ", STR((?lat1 + ?lat2) / 2), ")") AS ?wkt)
-
+                    
                     FILTER(?long1 >= ${long1} && ?long1 <= ${long2})
                     FILTER(?lat1 <= ${lat1} && ?lat1 >= ${lat2})
                 }
@@ -712,12 +728,14 @@ export default {
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
-                    ?solne era:length ?solLength;
+                    ?solne rt:cost ?solLength;
                         gsp:asWKT ?solWkt;
-                        era:linkedTo ?opne.
+                        rt:linkedTo ?opne.
+                    
                     ?opne gsp:asWKT ?opWkt;
-                        era:length ?opLength.
+                        rt:cost ?opLength.
                 } 
                 FROM <http://data.europa.eu/949/graph/rinf>
                 WHERE {        
@@ -786,11 +804,13 @@ export default {
                 PREFIX era-nv: <http://data.europa.eu/949/concepts/navigabilities/rinf/>
                 PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
                     ?opne gsp:asWKT ?opWkt;
-                        era:length ?opLength;
-                        era:linkedTo ?solne.
-                    ?solne era:length ?solLength;
+                        rt:cost ?opLength;
+                        rt:linkedTo ?solne.
+                    
+                    ?solne rt:cost ?solLength;
                         gsp:asWKT ?solWkt.
                 } 
                 FROM <http://data.europa.eu/949/graph/rinf>
