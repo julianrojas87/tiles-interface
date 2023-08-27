@@ -29,7 +29,7 @@ export default {
                 return `
                 PREFIX osm: <https://w3id.org/openstreetmap/terms#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
-                PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+                PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
                 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
                 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
                 PREFIX rt: <http://w3id.org/routable-tiles/terms#>
@@ -48,7 +48,7 @@ export default {
                     ?way a osm:Way;
                         osm:hasNodes ?initList.
                     
-                    ?initList rdf:first [ gsp:asWKT ?loc ].
+                    ?initList rdf:first [ wgs:lat ?lat; wgs:long ?long ].
 
                     {
                         # Get consecutive nodes with their location
@@ -82,21 +82,9 @@ export default {
                         }
                     }
                     
-                    # Tile GeoSPARQL filter
-                    FILTER (
-                        geof:sfWithin(?loc, 
-                            '''
-                                <http://www.opengis.net/def/crs/OGC/1.3/CRS84>
-                                POLYGON ((
-                                    ${long1} ${lat1}, 
-                                    ${long2} ${lat1},
-                                    ${long2} ${lat2}, 
-                                    ${long1} ${lat2},
-                                    ${long1} ${lat1}
-                                ))
-                            '''^^gsp:wktLiteral
-                        )
-                    )
+                    # Tile geospatial filter
+                    FILTER(?long >= ${long1} && ?long <= ${long2})
+                    FILTER(?lat <= ${lat1} && ?lat >= ${lat2})
                 }
                 `;
             }
@@ -122,11 +110,11 @@ export default {
         },
         queries: [
             (lat1, long1, lat2, long2) => {
-                // Query without GeoSPARQL functions because it performs worse in GraphDB
                 return `
                 PREFIX osm: <https://w3id.org/openstreetmap/terms#>
-                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+                PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
                 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
                 PREFIX rt: <http://w3id.org/routable-tiles/terms#>
                 CONSTRUCT {
@@ -137,18 +125,15 @@ export default {
 
                     ?nodeA rt:biLinkedTo ?nodeB.
                     ?nodeC rt:linkedTo ?nodeD.
-                        
-                } WHERE {
+                }
+                FROM <http://belgium.roads.osm>
+                WHERE {
                     # Get location of the first element of the list
                     ?way a osm:Way;
                         osm:hasNodes ?initList.
                     
-                    ?initList rdf:first [ gsp:asWKT ?loc ].
-                    
-                    # Extract latitude and longitude from WKT string
-                    BIND(xsd:decimal(REPLACE(STR(?loc), "^[^0-9\\.]*([0-9\\.]+) .*$", "$1")) AS ?long)
-                    BIND(xsd:decimal(REPLACE(STR(?loc), "^.* ([0-9\\.]+)[^0-9\\.]*$", "$1")) AS ?lat)
-                    
+                    ?initList rdf:first [ wgs:lat ?lat; wgs:long ?long ].
+
                     {
                         # Get consecutive nodes with their location
                         ?nodeA ^rdf:first/rdf:rest/rdf:first ?nodeB;
@@ -180,8 +165,8 @@ export default {
                             ?way osm:hasTag "oneway=yes".
                         }
                     }
-
-                    # Geospatial filter
+                    
+                    # Tile geospatial filter
                     FILTER(?long >= ${long1} && ?long <= ${long2})
                     FILTER(?lat <= ${lat1} && ?lat >= ${lat2})
                 }
