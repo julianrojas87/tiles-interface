@@ -24,10 +24,8 @@ export default {
             `
         },
         queries: [
-            // We split unidirectional and bidirectional into 2 queries for performance reasons
             (lat1, long1, lat2, long2) => {
-                // GeoSPARQL query for all osm:Nodes and 
-                // their unidirectional connections starting from the given bbox
+                // Query for all osm:Nodes and their unidirectional connections starting from the given tile
                 return `
                 PREFIX osm: <https://w3id.org/openstreetmap/terms#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
@@ -83,8 +81,7 @@ export default {
                 `;
             },
             (lat1, long1, lat2, long2) => {
-                // GeoSPARQL query for all osm:Nodes and 
-                // their bidirectional connections starting from the given bbox
+                // SPARQL query for all osm:Nodes and their bidirectional connections starting from the given tile
                 return `
                 PREFIX osm: <https://w3id.org/openstreetmap/terms#>
                 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
@@ -139,6 +136,124 @@ export default {
                     FILTER(?lat <= ${lat1} && ?lat >= ${lat2})
                 }
                 `
+            },
+            (lat1, long1, lat2, long2) => {
+                // Query for incoming bidirectional node connections at the border of the tile
+                return `
+                PREFIX osm: <https://w3id.org/openstreetmap/terms#>
+                PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+                PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
+                CONSTRUCT {
+                    ?nodeOut gsp:asWKT ?wkt;
+                        rt:linkedTo ?nodeIn.
+                }
+                FROM <http://belgium.roads.osm>
+                WHERE {
+                    # Node that sitting just outside the tile in question
+                    ?nodeOut a osm:Node;
+                        wgs:lat ?latOut;
+                        wgs:long ?longOut;
+                        gsp:asWKT ?wkt.
+
+                # Select only Nodes that are part of certain types of Ways
+                    VALUES ?roadTypes { 
+                        osm:Motorway 
+                        osm:Trunk 
+                        osm:Primary 
+                        osm:Secondary
+                        osm:Tertiary
+                        osm:Residential 
+                        osm:Unclassified
+                        osm:Crossing
+                    }
+                    
+                    ?way a osm:Way;
+                        osm:highway ?roadTypes;
+                        osm:hasNodes ?nodeList.
+
+                    # Make sure the node is part of the Ways we want
+                    ?nodeList rdf:rest*/rdf:first ?nodeOut.
+                    
+                    # Get consecutive nodes that are unidirectional
+                    ?way osm:hasTag "oneway=yes".
+
+                    ?nodeIn a osm:Node;
+                        wgs:lat ?latIn;
+                        wgs:long ?longIn.
+
+                    ?nodeOut ^rdf:first/rdf:rest/rdf:first ?nodeIn.
+
+                    
+                    # Conditions for node to be inside the tile in question
+                    FILTER(?longIn >= ${long1} && ?longIn <= ${long2})
+                    FILTER(?latIn <= ${lat1} && ?latIn >= ${lat2})
+        
+                    # Condition for node to be outside the tile in question
+                    FILTER(?longOut < ${long1} || ?longOut > ${long2} || ?latOut > ${lat1} || ?latOut < ${lat2})
+                }
+                `;
+            },
+            (lat1, long1, lat2, long2) => {
+                // Query for incoming unidirectional node connections at the border of the tile
+                return `
+                PREFIX osm: <https://w3id.org/openstreetmap/terms#>
+                PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+                PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+                PREFIX rt: <http://w3id.org/routable-tiles/terms#>
+                CONSTRUCT {
+                    ?nodeOut gsp:asWKT ?wkt;
+                        rt:biLinkedTo ?nodeIn.
+                }
+                FROM <http://belgium.roads.osm>
+                WHERE {
+                    # Node that sitting just outside the tile in question
+                    ?nodeOut a osm:Node;
+                        wgs:lat ?latOut;
+                        wgs:long ?longOut;
+                        gsp:asWKT ?wkt.
+
+                # Select only Nodes that are part of certain types of Ways
+                    VALUES ?roadTypes { 
+                        osm:Motorway 
+                        osm:Trunk 
+                        osm:Primary 
+                        osm:Secondary
+                        osm:Tertiary
+                        osm:Residential 
+                        osm:Unclassified
+                        osm:Crossing
+                    }
+                    
+                    ?way a osm:Way;
+                        osm:highway ?roadTypes;
+                        osm:hasNodes ?nodeList.
+
+                    # Make sure the node is part of the Ways we want
+                    ?nodeList rdf:rest*/rdf:first ?nodeOut.
+                    
+                    # Get consecutive nodes that are bidirectional
+                    FILTER NOT EXISTS { ?way osm:hasTag "oneway=yes" }
+
+                    ?nodeIn a osm:Node;
+                        wgs:lat ?latIn;
+                        wgs:long ?longIn.
+
+                    ?nodeOut ^rdf:first/rdf:rest/rdf:first ?nodeIn.
+
+                    
+                    # Conditions for node to be inside the tile in question
+                    FILTER(?longIn >= ${long1} && ?longIn <= ${long2})
+                    FILTER(?latIn <= ${lat1} && ?latIn >= ${lat2})
+        
+                    # Condition for node to be outside the tile in question
+                    FILTER(?longOut < ${long1} || ?longOut > ${long2} || ?latOut > ${lat1} || ?latOut < ${lat2})
+                }
+                `;
             }
         ]
     }
