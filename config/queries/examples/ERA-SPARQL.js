@@ -4,7 +4,7 @@
  */
 
 export default {
-    virtuoso: {
+    ERA_virtuoso: {
         location: (id) => {
             return `
             PREFIX era: <http://data.europa.eu/949/>
@@ -25,6 +25,53 @@ export default {
             }
             `
         },
+        index: [
+            (lat1, long1, lat2, long2) => {
+                // Query to get the OP and SoL-related node count of a given tile (geospatial bounding box)
+                return `
+                PREFIX era: <http://data.europa.eu/949/>
+                PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+                SELECT (COUNT(?node) AS ?count) 
+                FROM <http://data.europa.eu/949/graph/rinf>
+                WHERE {
+                    ?OP a era:OperationalPoint;
+                            wgs:location [ 
+                                wgs:lat ?lat;
+                                wgs:long ?long
+                            ].
+                    {
+                        ?OP era:hasAbstraction [ era:elementPart ?node ].
+                    }
+                    UNION
+                    {
+                        ?SoL a era:SectionOfLine;
+                            era:hasAbstraction [ era:elementPart ?node ].
+
+                        ?OP2 wgs:location [ 
+                                wgs:lat ?lat2;
+                                wgs:long ?long2
+                            ].
+                        
+                        {
+                            ?SoL era:opStart ?OP;
+                                era:opEnd ?OP2
+                        }
+                        UNION
+                        {
+                            ?SoL era:opEnd ?OP;
+                                era:opStart ?OP2
+                        }
+
+                        BIND(CONCAT("POINT(", STR((?long + ?long2) / 2), " ", STR((?lat + ?lat2) / 2), ")") AS ?wkt)
+                    }
+                    
+                    
+                    FILTER(?long >= ${long1} && ?long <= ${long2})
+                    FILTER(?lat <= ${lat1} && ?lat >= ${lat2})
+                }
+                `;
+            }
+        ],
         queries: [
             (lat1, long1, lat2, long2) => {
                 // Query for all OP related topology nodes and their connections within the given bbox
@@ -294,7 +341,7 @@ export default {
             }
         ]
     },
-    graphdb: {
+    ERA_graphdb: {
         location: (id) => {
             return `
             PREFIX era: <http://data.europa.eu/949/>
@@ -317,7 +364,7 @@ export default {
         queries: [
             (lat1, long1, lat2, long2) => {
                 // Query for all OP related topology nodes and their connections within the given bbox
-                // Here we directly bind the default length because GraphDB does not deal well
+                // Here we directly bind the default cost because GraphDB does not deal well
                 // with conditional functions like COALESCE() or IF().
                 return `
                 PREFIX era: <http://data.europa.eu/949/>
@@ -585,7 +632,7 @@ export default {
             }
         ]
     },
-    stardog: {
+    ERA_stardog: {
         location: (id) => {
             return `
             PREFIX era: <http://data.europa.eu/949/>

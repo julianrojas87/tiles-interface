@@ -4,7 +4,7 @@
  */
 
 export default {
-    virtuoso: {
+    OSM_BE: {
         location: (id) => {
             return `
             PREFIX osm: <https://w3id.org/openstreetmap/terms#>
@@ -23,6 +23,48 @@ export default {
             }
             `
         },
+        index: [
+            (lat1, long1, lat2, long2) => {
+                // Query to get the node count of a given tile (geospatial bounding box)
+                return `
+                PREFIX osm: <https://w3id.org/openstreetmap/terms#>
+                PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+                SELECT (COUNT(?id) AS ?count)
+                FROM <http://belgium.roads.osm>
+                WHERE {
+                    # Node that belongs to the tile in question
+                    ?id a osm:Node;
+                        wgs:lat ?lat;
+                        wgs:long ?long.
+
+                    # Select only Nodes that are part of certain types of Ways
+                    VALUES ?roadTypes { 
+                        osm:Motorway 
+                        osm:Trunk 
+                        osm:Primary 
+                        osm:Secondary
+                        osm:Tertiary
+                        osm:Residential 
+                        osm:Unclassified
+                        osm:Crossing
+                    }
+                    
+                    ?way a osm:Way;
+                        osm:highway ?roadTypes;
+                        osm:hasNodes ?nodeList.
+
+                    # Make sure the tile node is part of the Ways we want
+                    ?nodeList rdf:rest*/rdf:first ?id.
+
+                    # Tile geospatial filter
+                    FILTER(?long >= ${long1} && ?long <= ${long2})
+                    FILTER(?lat <= ${lat1} && ?lat >= ${lat2})
+                }
+                `;
+            }
+        ],
         queries: [
             (lat1, long1, lat2, long2) => {
                 // Query for all osm:Nodes and their unidirectional connections starting from the given tile
